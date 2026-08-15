@@ -11,6 +11,7 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "cv": "node scripts/generate-cv.mjs",
+    "markdown": "node scripts/generate-markdown.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"

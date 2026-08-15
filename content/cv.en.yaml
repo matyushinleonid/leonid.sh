@@ -14,7 +14,7 @@ hero:
   name: Leonid Matyushin
   role: Software Engineer
   location: Moscow, Russia
-  primaryAction: inspect experience
+  primaryAction: work experience
   cvAction: download CV
 
 labels:
@@ -45,7 +45,7 @@ experience:
           operator and added a mechanism that disables automatic replacement when
           monitoring behaves anomalously. The system has performed 1,000+
           disk replacements across 4+ regions for YDB and an in-house S3-compatible
-          object storage. Extended the operator gRPC API, performed CRD
+          object storage. Extended the operator’s gRPC API, performed CRD
           migrations, agreed failure scopes and regional rollout order with SREs
           and managers, and set up monitoring and alerting.
         technologies: [Go, Kubebuilder]
@@ -246,7 +246,7 @@ stack:
 
 education:
   - degree: MSc, CDISE / Faculty of Computer Science
-    institution: Skotech / Higher School of Economics
+    institution: Skoltech / Higher School of Economics
     location: Moscow, Russia
     period: Sep 2018 – Jun 2020
   - degree: BSc, Faculty of Mathematics
