@@ -70,6 +70,7 @@ jobs:
           set -euo pipefail
           minor="${VERSION%.*}"
           docker buildx imagetools create \
+            --prefer-index=false \
             --tag "$IMAGE:$VERSION" \
             --tag "$IMAGE:$minor" \
             "$IMAGE:sha-$GITHUB_SHA"
