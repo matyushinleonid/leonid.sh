@@ -1,0 +1,11 @@
+.git
+.github
+.idea
+.astro
+dist
+build
+public/cv
+node_modules
+npm-debug.log*
+AGENTS.md
+README.md

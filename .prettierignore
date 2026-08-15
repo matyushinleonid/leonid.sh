@@ -1,0 +1,7 @@
+dist/
+build/
+public/cv/
+node_modules/
+package-lock.json
+.idea/
+deploy/helm/*/templates/

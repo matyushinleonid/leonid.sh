@@ -1,0 +1,6 @@
+apiVersion: v2
+name: leonid-sh
+description: Personal website for Leonid Matyushin
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

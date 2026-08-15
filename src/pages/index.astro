@@ -1,0 +1,43 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#080b0d" />
+    <title>Leonid Matyushin — resolving locale</title>
+    <script is:inline>
+      (() => {
+        const saved = window.localStorage.getItem("leonid.locale");
+        const locale =
+          saved === "ru" || saved === "en"
+            ? saved
+            : navigator.languages?.some((language) =>
+                  language.toLowerCase().startsWith("ru"),
+                )
+              ? "ru"
+              : "en";
+        window.location.replace(`/${locale}/`);
+      })();
+    </script>
+  </head>
+  <body class="locale-gateway">
+    <main class="locale-terminal">
+      <span class="prompt">$</span> resolving locale<span
+        class="cursor"
+        aria-hidden="true">_</span
+      >
+      <noscript>
+        <p>
+          Choose language: <a href="/en/">English</a> · <a href="/ru/"
+            >Русский</a
+          >
+        </p>
+      </noscript>
+    </main>
+  </body>
+</html>

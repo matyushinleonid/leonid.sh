@@ -1,0 +1,15 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+const segments = text.split("**");
+---
+
+{
+  segments.map((segment, index) =>
+    index % 2 === 1 ? <strong>{segment}</strong> : segment,
+  )
+}

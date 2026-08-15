@@ -1,0 +1,20 @@
+services:
+  site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    init: true
+    ports:
+      - "${PORT:-4321}:4321"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./astro.config.ts:/app/astro.config.ts:ro
+      - ./tsconfig.json:/app/tsconfig.json:ro
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:4321/"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
