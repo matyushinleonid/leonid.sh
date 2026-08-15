@@ -1,8 +1,6 @@
 ---
 import "../styles/global.css";
-import "../styles/designs.css";
 
-import { defaultDesign, designIds } from "../data/designs";
 import { siteCopy, type Locale } from "../data/site";
 
 interface Props {
@@ -13,18 +11,18 @@ interface Props {
 
 const { locale, title, description } = Astro.props;
 const canonical = new URL(`/${locale}/`, Astro.site);
-const allowed = JSON.stringify(designIds);
 const siteName = siteCopy[locale].hero.name;
 ---
 
 <!doctype html>
-<html lang={locale} data-design={defaultDesign}>
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#080b0d" />
-    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href={`/favicon-${locale}.svg`} />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
@@ -40,26 +38,6 @@ const siteName = siteCopy[locale].hero.name;
       hreflang="x-default"
       href={new URL("/", Astro.site)}
     />
-    <script is:inline src="/design.js"></script>
-    <script
-      is:inline
-      set:html={`(() => {
-  const allowed = ${allowed};
-  const root = document.documentElement;
-  const pinned = window.leonidDesign;
-
-  if (allowed.includes(pinned)) {
-    root.dataset.design = pinned;
-    root.dataset.pinned = "";
-    return;
-  }
-
-  try {
-    const saved = window.localStorage.getItem("leonid.design");
-    if (allowed.includes(saved)) root.dataset.design = saved;
-  } catch {}
-})();`}
-    />
     <title>{title}</title>
   </head>
   <body>
@@ -68,49 +46,17 @@ const siteName = siteCopy[locale].hero.name;
     </a>
     <div class="noise" aria-hidden="true"></div>
     <slot />
-    <script
-      is:inline
-      set:html={`(() => {
-  const allowed = ${allowed};
-  const root = document.documentElement;
-
-  document.querySelectorAll("[data-locale]").forEach((link) => {
-    link.addEventListener("click", () => {
-      const locale = link.getAttribute("data-locale");
-      if (locale) {
-        try {
-          window.localStorage.setItem("leonid.locale", locale);
-        } catch {}
-      }
-    });
-  });
-
-  if ("pinned" in root.dataset) return;
-
-  const buttons = document.querySelectorAll("[data-design-button]");
-
-  function setDesign(design) {
-    if (!allowed.includes(design)) return;
-    root.dataset.design = design;
-    buttons.forEach((button) => {
-      button.setAttribute(
-        "aria-pressed",
-        String(button.getAttribute("data-design-button") === design),
-      );
-    });
-    try {
-      window.localStorage.setItem("leonid.design", design);
-    } catch {}
-  }
-
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setDesign(button.getAttribute("data-design-button"));
-    });
-  });
-
-  setDesign(root.dataset.design);
-})();`}
-    />
+    <script is:inline>
+      document.querySelectorAll("[data-locale]").forEach((link) => {
+        link.addEventListener("click", () => {
+          const locale = link.getAttribute("data-locale");
+          if (locale) {
+            try {
+              window.localStorage.setItem("leonid.locale", locale);
+            } catch {}
+          }
+        });
+      });
+    </script>
   </body>
 </html>

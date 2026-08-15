@@ -4,7 +4,6 @@ import { Image } from "astro:assets";
 import portrait from "../../assets/images/portrait.jpg";
 import ExperienceEntry from "../../components/ExperienceEntry.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
-import { designs } from "../../data/designs";
 import { cvHref, locales, siteCopy, type Locale } from "../../data/site";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
@@ -44,17 +43,6 @@ const navigationLabel =
         <a href="#stack">{copy.nav.stack}</a>
         <a href="#education">{copy.nav.education}</a>
       </nav>
-
-      <div class="design-switcher" role="group" aria-label={copy.labels.layout}>
-        <span>{copy.labels.layout}:</span>
-        {
-          designs.map((design, index) => (
-            <button type="button" data-design-button={design.id}>
-              {String(index + 1).padStart(2, "0")} {design.label}
-            </button>
-          ))
-        }
-      </div>
 
       <div class="header-actions">
         <a

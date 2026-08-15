@@ -10,8 +10,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-design: ""
-
 podAnnotations: {}
 podLabels: {}
 
