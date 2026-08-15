@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://home.leonid.sh/sitemap-index.xml
+Sitemap: https://leonid.sh/sitemap-index.xml

@@ -2,7 +2,7 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://home.leonid.sh",
+  site: "https://leonid.sh",
   output: "static",
   trailingSlash: "always",
   integrations: [sitemap()],
