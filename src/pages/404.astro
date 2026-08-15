@@ -1,0 +1,77 @@
+---
+import { Image } from "astro:assets";
+
+import backrooms from "../assets/images/backrooms.jpg";
+import "../styles/global.css";
+
+const bars = ["#fff", "#ff0", "#0ff", "#0f0", "#f0f", "#f00", "#00f"];
+
+const pages = [
+  { number: "100", label: "index", href: "/en/" },
+  { number: "101", label: "projects", href: "/en/#projects" },
+  { number: "102", label: "experience", href: "/en/#experience" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-en.svg" />
+    <link rel="author" type="text/plain" href="/humans.txt" />
+    <title>P404 — page not found</title>
+  </head>
+  <body class="notfound">
+    <div class="noise" aria-hidden="true"></div>
+    <main class="shell notfound-inner">
+      <header class="section-heading">
+        <span aria-hidden="true">404</span>
+        <div>
+          <p>404.md</p>
+          <h2>page not found</h2>
+        </div>
+      </header>
+
+      <figure class="notfound-visual">
+        <Image
+          src={backrooms}
+          alt=""
+          widths={[640, 960, 1280]}
+          sizes="(max-width: 780px) 92vw, 760px"
+          loading="eager"
+        />
+        <figcaption>
+          <span>level 0</span>
+          <span>no signal</span>
+        </figcaption>
+        <div class="testcard" aria-hidden="true">
+          {bars.map((bar) => <i style={`background:${bar}`} />)}
+        </div>
+      </figure>
+
+      <p class="notfound-copy">
+        You noclipped out of the index.<br />
+        <span class="notfound-ru">Вы вышли за пределы указателя.</span>
+      </p>
+
+      <ul class="notfound-pages">
+        {
+          pages.map((page) => (
+            <li>
+              <a href={page.href}>
+                <b>P{page.number}</b>
+                {page.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="notfound-foot"><a href="/">leonid.sh</a></p>
+    </main>
+  </body>
+</html>

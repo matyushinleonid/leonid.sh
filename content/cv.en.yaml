@@ -169,7 +169,7 @@ projects:
     technologies: [Kubernetes, Terraform, Ansible, Argo CD, Envoy, Prometheus]
 
   - slug: sein
-    name: sein-zum-tode
+    name: sein zum tode
     description: >-
       A Telegram bot intended to help users confront the prospect of death as
       something that will happen and, moreover, **is already happening** to
@@ -197,6 +197,7 @@ projects:
     href: https://github.com/matyushinleonid/k8s.leonid.sh/tree/main/argocd/minecraft
     argocdApp: minecraft
     status: running
+    cvEntry: false
     technologies: [Kubernetes, Helm, Argo CD]
     extraLink:
       label: map.minecraft.leonid.sh

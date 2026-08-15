@@ -38,6 +38,7 @@ type Project = {
   href: string;
   status: string;
   argocdApp?: string;
+  cvEntry?: boolean;
   technologies: string[];
   extraLink?: Link;
 };

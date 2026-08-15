@@ -24,6 +24,33 @@ const homeLabel =
   locale === "ru" ? "Главная Леонида Матюшина" : "Leonid Matyushin home";
 const navigationLabel =
   locale === "ru" ? "Основная навигация" : "Primary navigation";
+const alternate = siteCopy[alternateLocale];
+
+const rickAssets = Object.values(
+  import.meta.glob<{ default: ImageMetadata }>(
+    "../../assets/rick/*.{gif,png,webp,jpg,jpeg}",
+    { eager: true },
+  ),
+).map(({ default: image }) => ({
+  src: image.src,
+  width: image.width,
+  height: image.height,
+}));
+
+const lyrics = [
+  "NEVER GONNA GIVE YOU UP",
+  "NEVER GONNA LET YOU DOWN",
+  "NEVER GONNA RUN AROUND",
+  "AND DESERT YOU",
+  "NEVER GONNA MAKE YOU CRY",
+  "NEVER GONNA TELL A LIE",
+];
+
+const revealLabel = "reveal";
+const PROJECT_WINDOW = 2;
+const projectPages = Math.ceil(copy.projects.length / PROJECT_WINDOW);
+const prev = locale === "ru" ? "Предыдущие проекты" : "Previous projects";
+const next = locale === "ru" ? "Следующие проекты" : "Next projects";
 ---
 
 <BaseLayout
@@ -64,7 +91,9 @@ const navigationLabel =
       <div class="intro-copy">
         <p class="eyebrow">{copy.hero.role}</p>
         <h1 id="hero-heading">{copy.hero.name}</h1>
-        <p class="hero-location">{copy.hero.location}</p>
+        <p class="hero-location">
+          {copy.hero.location}<span class="flash" aria-hidden="true">█</span>
+        </p>
 
         <div class="hero-actions">
           <a class="text-link primary-link" href="#experience">
@@ -111,10 +140,13 @@ const navigationLabel =
           aria-labelledby="experience-title"
         >
           <header class="section-heading">
-            <span aria-hidden="true">02</span>
+            <span aria-hidden="true">102</span>
             <div>
               <p>career.md</p>
               <h2 id="experience-title">{copy.labels.selectedExperience}</h2>
+              <p class="subtitle" aria-hidden="true">
+                {alternate.labels.selectedExperience}
+              </p>
             </div>
           </header>
           <div class="experience-list">
@@ -134,13 +166,33 @@ const navigationLabel =
           aria-labelledby="projects-title"
         >
           <header class="section-heading heading-with-note">
-            <span aria-hidden="true">01</span>
+            <span aria-hidden="true">101</span>
             <div>
               <p>projects/</p>
               <h2 id="projects-title">{copy.labels.projects}</h2>
+              <p class="subtitle" aria-hidden="true">
+                {alternate.labels.projects}
+              </p>
             </div>
+            {
+              copy.projects.length > PROJECT_WINDOW && (
+                <div class="project-nav" data-project-nav>
+                  <button
+                    type="button"
+                    data-project-step="-1"
+                    aria-label={prev}
+                  >
+                    ◀
+                  </button>
+                  <span data-project-count>1/{projectPages}</span>
+                  <button type="button" data-project-step="1" aria-label={next}>
+                    ▶
+                  </button>
+                </div>
+              )
+            }
           </header>
-          <div class="project-list">
+          <div class="project-list" data-project-list={PROJECT_WINDOW}>
             {copy.projects.map((project) => <ProjectCard {...project} />)}
           </div>
         </section>
@@ -151,10 +203,13 @@ const navigationLabel =
           aria-labelledby="stack-title"
         >
           <header class="section-heading small-heading">
-            <span aria-hidden="true">03</span>
+            <span aria-hidden="true">103</span>
             <div>
               <p>/etc/toolbox</p>
               <h2 id="stack-title">{copy.labels.stack}</h2>
+              <p class="subtitle" aria-hidden="true">
+                {alternate.labels.stack}
+              </p>
             </div>
           </header>
           <div class="stack-groups">
@@ -175,10 +230,13 @@ const navigationLabel =
           aria-labelledby="education-title"
         >
           <header class="section-heading small-heading">
-            <span aria-hidden="true">04</span>
+            <span aria-hidden="true">104</span>
             <div>
               <p>education.md</p>
               <h2 id="education-title">{copy.labels.education}</h2>
+              <p class="subtitle" aria-hidden="true">
+                {alternate.labels.education}
+              </p>
             </div>
           </header>
           <div class="education-list">
@@ -196,13 +254,17 @@ const navigationLabel =
 
         <section
           class="content-section achievements-section"
+          id="achievements"
           aria-labelledby="achievements-title"
         >
           <header class="section-heading small-heading">
-            <span aria-hidden="true">05</span>
+            <span aria-hidden="true">105</span>
             <div>
               <p>achievements.md</p>
               <h2 id="achievements-title">{copy.labels.achievements}</h2>
+              <p class="subtitle" aria-hidden="true">
+                {alternate.labels.achievements}
+              </p>
             </div>
           </header>
           <div class="achievement-list">
@@ -235,8 +297,22 @@ const navigationLabel =
       >
         {copy.labels.source}: github<span aria-hidden="true">↗</span>
       </a>
+      <button type="button" class="reveal-key" data-reveal-key>
+        <i aria-hidden="true"></i>{revealLabel}
+      </button>
     </div>
   </footer>
+
+  <div class="page-entry" data-page-entry aria-live="polite"></div>
+
+  <div class="reveal-stage" data-reveal-stage aria-hidden="true"></div>
+
+  <script
+    is:inline
+    type="application/json"
+    data-reveal-data
+    set:html={JSON.stringify({ frames: rickAssets, lyrics })}
+  />
 </BaseLayout>
 
 <script>
@@ -286,4 +362,270 @@ const navigationLabel =
   document
     .querySelectorAll<HTMLElement>("[data-argocd-app]")
     .forEach((chip) => void resolve(chip));
+</script>
+
+<script>
+  const PAGES: Record<string, string> = {
+    "100": "top",
+    "101": "projects",
+    "102": "experience",
+    "103": "stack",
+    "104": "education",
+    "105": "achievements",
+  };
+  const ENTRY_TIMEOUT = 1500;
+  const HOLD = 1400;
+  const COPIES = 2;
+  const GAP = 16;
+
+  const indicator = document.querySelector<HTMLElement>("[data-page-entry]");
+  const stage = document.querySelector<HTMLElement>("[data-reveal-stage]");
+  const key = document.querySelector<HTMLElement>("[data-reveal-key]");
+  const root = document.documentElement;
+
+  type Frame = { src: string; width: number; height: number };
+
+  let payload: { frames: Frame[]; lyrics: string[] } = {
+    frames: [],
+    lyrics: [],
+  };
+  try {
+    payload = JSON.parse(
+      document.querySelector("[data-reveal-data]")?.textContent ?? "",
+    );
+  } catch {}
+
+  let buffer = "";
+  let entryTimer = 0;
+  let holdTimer = 0;
+
+  function paint(text: string, state = "") {
+    if (!indicator) return;
+    indicator.textContent = text;
+    indicator.dataset.state = state;
+    indicator.dataset.on = "";
+  }
+
+  function clearIndicator(delay: number) {
+    window.clearTimeout(holdTimer);
+    holdTimer = window.setTimeout(() => {
+      if (indicator) delete indicator.dataset.on;
+    }, delay);
+  }
+
+  function scrollTo(target: string) {
+    if (target === "top") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function resolve(page: string) {
+    if (page in PAGES) {
+      paint(`P${page}`, "found");
+      scrollTo(PAGES[page]);
+    } else if (page === "888") {
+      const on = "subtitles" in root.dataset;
+      if (on) delete root.dataset.subtitles;
+      else root.dataset.subtitles = "";
+      paint(on ? "888 OFF" : "888 ON", "found");
+    } else if (page === "404") {
+      paint("P404", "found");
+      window.setTimeout(() => window.location.assign("/404"), 400);
+    } else {
+      paint(`P${page} ?`, "missing");
+    }
+    clearIndicator(HOLD);
+  }
+
+  function typed(digit: string) {
+    window.clearTimeout(entryTimer);
+    window.clearTimeout(holdTimer);
+    buffer = (buffer + digit).slice(-3);
+    paint(`P${buffer.padEnd(3, "_")}`, "typing");
+    if (buffer.length === 3) {
+      const page = buffer;
+      buffer = "";
+      window.setTimeout(() => resolve(page), 220);
+      return;
+    }
+    entryTimer = window.setTimeout(() => {
+      buffer = "";
+      clearIndicator(0);
+    }, ENTRY_TIMEOUT);
+  }
+
+  function shuffled<T>(items: T[]) {
+    const copy = items.slice();
+    for (let index = copy.length - 1; index > 0; index -= 1) {
+      const swap = Math.floor(Math.random() * (index + 1));
+      [copy[index], copy[swap]] = [copy[swap], copy[index]];
+    }
+    return copy;
+  }
+
+  function panel(frame: Frame | null, index: number) {
+    const box = document.createElement("div");
+    box.className = "rick";
+    box.style.animationDelay = `${index * 110}ms`;
+    box.style.visibility = "hidden";
+
+    if (frame) {
+      const image = document.createElement("img");
+      image.src = frame.src;
+      image.width = frame.width;
+      image.height = frame.height;
+      image.alt = "";
+      box.append(image);
+    } else {
+      const art = document.createElement("b");
+      art.textContent = "▄█▀█▄";
+      box.append(art);
+    }
+
+    const line = document.createElement("span");
+    line.textContent = payload.lyrics[index % payload.lyrics.length] ?? "";
+    box.append(line);
+    return box;
+  }
+
+  function place(boxes: HTMLElement[]) {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const reserved =
+      header && getComputedStyle(header).position === "sticky"
+        ? header.getBoundingClientRect().bottom
+        : 0;
+    const area = {
+      x: GAP,
+      y: Math.max(0, reserved) + GAP,
+      width: window.innerWidth - GAP * 2,
+      height: window.innerHeight - Math.max(0, reserved) - GAP * 2,
+    };
+    const sizes = boxes.map((box) => ({
+      width: box.offsetWidth,
+      height: box.offsetHeight,
+    }));
+    let scale = 1;
+    let columns = 1;
+    let rows = 1;
+
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const widest = Math.max(...sizes.map((size) => size.width)) * scale;
+      const tallest = Math.max(...sizes.map((size) => size.height)) * scale;
+      columns = Math.max(1, Math.floor(area.width / (widest + GAP)));
+      rows = Math.max(1, Math.floor(area.height / (tallest + GAP)));
+      if (
+        columns * rows >= boxes.length &&
+        widest <= area.width &&
+        tallest <= area.height
+      ) {
+        break;
+      }
+      scale *= 0.82;
+    }
+
+    const cells = shuffled(
+      Array.from({ length: columns * rows }, (_, index) => index),
+    ).slice(0, boxes.length);
+    const cellWidth = area.width / columns;
+    const cellHeight = area.height / rows;
+
+    boxes.forEach((box, index) => {
+      const cell = cells[index];
+      const size = sizes[index];
+      const width = size.width * scale;
+      const height = size.height * scale;
+      const originX = area.x + (cell % columns) * cellWidth;
+      const originY = area.y + Math.floor(cell / columns) * cellHeight;
+      const slackX = Math.max(0, cellWidth - width - GAP);
+      const slackY = Math.max(0, cellHeight - height - GAP);
+
+      if (scale !== 1) {
+        box.style.width = `${width}px`;
+      }
+      box.style.left = `${Math.round(originX + Math.random() * slackX)}px`;
+      box.style.top = `${Math.round(originY + Math.random() * slackY)}px`;
+      box.style.visibility = "";
+    });
+  }
+
+  function reveal(on: boolean) {
+    if (!stage) return;
+    stage.textContent = "";
+    if (on) {
+      root.dataset.reveal = "";
+      const frames: (Frame | null)[] = payload.frames.length
+        ? payload.frames.flatMap((frame) => Array<Frame>(COPIES).fill(frame))
+        : Array<null>(6).fill(null);
+      const boxes = shuffled(frames).map((frame, index) => panel(frame, index));
+      boxes.forEach((box) => stage.append(box));
+      place(boxes);
+    } else {
+      delete root.dataset.reveal;
+    }
+    key?.setAttribute("aria-pressed", String(on));
+  }
+
+  key?.addEventListener("click", () => reveal(!("reveal" in root.dataset)));
+  stage?.addEventListener("click", () => reveal(false));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    const target = event.target as HTMLElement | null;
+    if (target?.closest("input, textarea, [contenteditable]")) return;
+
+    if (event.key === "Escape") {
+      reveal(false);
+      return;
+    }
+    if (event.key === "r" || event.key === "R" || event.key === "к") {
+      reveal(!("reveal" in root.dataset));
+      return;
+    }
+    if (event.key === "Backspace" && buffer) {
+      buffer = buffer.slice(0, -1);
+      paint(`P${buffer.padEnd(3, "_")}`, "typing");
+      return;
+    }
+    if (event.key >= "0" && event.key <= "9" && event.key.length === 1) {
+      typed(event.key);
+    }
+  });
+</script>
+
+<script>
+  const list = document.querySelector<HTMLElement>("[data-project-list]");
+  const nav = document.querySelector<HTMLElement>("[data-project-nav]");
+  const counter = document.querySelector<HTMLElement>("[data-project-count]");
+
+  if (list && nav) {
+    const cards = Array.from(list.children) as HTMLElement[];
+    const size = Number(list.dataset.projectList) || 2;
+    const pages = Math.ceil(cards.length / size);
+    let page = 0;
+
+    function draw(flip: boolean) {
+      const first = page * size;
+      cards.forEach((card, index) => {
+        card.hidden = index < first || index >= first + size;
+      });
+      if (counter) counter.textContent = `${page + 1}/${pages}`;
+      if (!flip || !list) return;
+      list.removeAttribute("data-flip");
+      void list.offsetWidth;
+      list.setAttribute("data-flip", "");
+    }
+
+    nav.addEventListener("click", (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLElement>(
+        "[data-project-step]",
+      );
+      if (!button) return;
+      page = (page + Number(button.dataset.projectStep) + pages) % pages;
+      draw(true);
+    });
+
+    draw(false);
+  }
 </script>
