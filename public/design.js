@@ -1,0 +1,1 @@
+window.leonidDesign = null;

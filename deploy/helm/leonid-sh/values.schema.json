@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["replicaCount", "image", "service", "gateway"],
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "design": {
+      "type": "string",
+      "description": "Layout variant to pin. Empty keeps the in-page switcher.",
+      "enum": [
+        "",
+        "atlas",
+        "bento",
+        "luna",
+        "crt",
+        "ceefax",
+        "teletext",
+        "vhs",
+        "web1",
+        "zine",
+        "guestbook"
+      ]
+    },
+    "image": {
+      "type": "object",
+      "required": ["repository", "pullPolicy", "tag", "digest"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": { "type": "string" },
+        "digest": { "type": "string" }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": ["type", "port", "targetPort"],
+      "properties": {
+        "type": { "type": "string" },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "targetPort": { "type": "integer", "minimum": 1, "maximum": 65535 }
+      }
+    },
+    "gateway": {
+      "type": "object",
+      "required": ["enabled", "host", "dnsTarget", "clusterIssuer", "parent"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "host": { "type": "string", "minLength": 1 },
+        "dnsTarget": { "type": "string", "minLength": 1 },
+        "clusterIssuer": { "type": "string", "minLength": 1 },
+        "parent": {
+          "type": "object",
+          "required": ["name", "namespace", "httpSectionName"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "namespace": { "type": "string", "minLength": 1 },
+            "httpSectionName": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,289 @@
+meta:
+  title: Леонид Матюшин — Software Engineer
+  description: >-
+    Леонид Матюшин — software engineer, специализирующийся на бэкенд-системах,
+    Kubernetes, автоматизации поставки и инфраструктуре.
+
+nav:
+  experience: опыт
+  projects: проекты
+  stack: навыки
+  education: образование
+
+hero:
+  name: Леонид Матюшин
+  role: Software Engineer
+  location: Москва, Россия
+  primaryAction: опыт работы
+  cvAction: скачать CV
+
+labels:
+  selectedExperience: опыт работы
+  projects: персональные проекты
+  stack: навыки
+  education: образование
+  achievements: другие достижения
+  source: исходники
+  portrait: Леонид Матюшин
+  layout: вид
+
+contact:
+  email: matyushinleonid@gmail.com
+  site: leonid.sh
+  telegram: "@matyushinleonid"
+
+experience:
+  - company: Nebius
+    role: Software Engineer
+    period: авг 2023 – ноя 2025
+    location: Амстердам, Нидерланды
+    highlights:
+      - title: "HWaaS: автоматизация замены дисков"
+        description: >-
+          Спроектировал и реализовал инфраструктуру, полностью
+          автоматизировавшую замену неисправных дисков (в частности, создание
+          Jira-тикетов для инженеров дата-центров). Решение я построил как часть
+          Kubernetes-оператора; также был добавлен механизм, отключающий
+          автоматическую замену при аномальном поведении мониторинга. Система выполнила более
+          1 000 замен дисков в 4+ регионах для YDB и внутреннего S3-совместимого object
+          storage. Расширил gRPC API оператора, провёл миграции CRD, согласовал
+          сценарии отказов и очерёдность регионального запуска с SRE и
+          менеджерами, настроил мониторинг и алертинг.
+        technologies: [Go, Kubebuilder]
+      - title: "HWaaS: автоматизированный деплой"
+        description: >-
+          Спроектировал и реализовал автоматическую сборку и разворачивание сервиса
+          HWaaS, который поставляется как набор тесно связанных
+          Kubernetes-ресурсов. Внедрил GitOps-подход, благодаря которому релизы
+          стали обратимыми, быстрее и прозрачнее для остальных разработчиков.
+        technologies:
+          [Kubernetes, TeamCity, Timoni, Helm, Argo CD, Argo Workflows]
+      - title: "Dubformer: бэкенд обработки медиа"
+        description: >-
+          Спроектировал и реализовал микросервисы машинного перевода и синтеза
+          речи и интегрировал их в автоматический пайплайн перевода видео.
+          Разработал REST API как отдельных сервисов, так и пайплайна целиком.
+        technologies: [Python, Airflow, FastAPI, MongoDB, AWS SQS, AWS S3]
+      - title: "Dubformer: инфраструктура"
+        description: >-
+          Построил мониторинг и алертинг, отображающий поведение и нагрузку
+          бэкенда на дашбордах и ускоряющий реакцию на инциденты через
+          уведомления в мессенджере. Реализовал CI/CD и сократил суммарное время
+          сборки и тестов с 60 до 10 минут.
+        technologies: [Docker, GitHub Actions, Grafana, Prometheus]
+
+  - company: NtechLab
+    role: Software Engineer
+    period: ноя 2020 – авг 2023
+    location: Москва, Россия
+    highlights:
+      - title: Сервис измерения скорости и памяти
+        description: >-
+          Спроектировал и реализовал внутренний сервис для измерения скорости
+          инференса и потребления памяти моделями компьютерного зрения, которые
+          разрабатывались в R&D-подразделении. Предоставил REST API и построил
+          поверх него CLI и SDK. Проактивно собирал обратную связь и добился
+          внедрения в нескольких командах — детекции объектов, распознавания лиц
+          и автомобильных номеров, — значительно сократив цикл исследовательских
+          экспериментов.
+        technologies: [Python, Celery, PostgreSQL, RabbitMQ]
+      - title: Пайплайны разметки данных
+        description: >-
+          Разработал Airflow-пайплайны, автоматизировавшие разметку данных для
+          задач классификации изображений в R&D-подразделении.
+        technologies: [Python, Airflow, Yandex Toloka]
+      - title: Классификация NSFW-изображений
+        description: >-
+          Разработал модель обнаружения NSFW-контента, превзошедшую популярные
+          open-source решения на публичных и внутренних бенчмарках, и развернул
+          её в инфраструктуре заказчика.
+        technologies:
+          [Python, PyTorch, PyTorch Lightning, TorchServe, Albumentations]
+      - title: Детекция падения людей
+        description: >-
+          Разработал модель детекции падения людей на основе адаптированной к
+          домену нейросети поверх open-source модели распознавания скелета.
+          Достиг высокой доли true positive срабатываний при крайне низкой доле
+          false positive на собранных мною бенчмарках и отвечал за полный цикл
+          от сбора и разметки данных до интеграции в продукт.
+        technologies: [Python, PyTorch, TensorRT, OpenVINO]
+      - title: Ускорение модели распознавания лиц
+        description: >-
+          Ускорил GPU-модель распознавания лиц на 10% без потери точности,
+          применив методы neural architecture search для выбора более
+          эффективного backbone.
+        technologies: [Python, PyTorch]
+
+  - company: Лаборатория методов анализа больших данных
+    cvBullets: false
+    role: Research Intern
+    period: янв 2020 – ноя 2020
+    location: Москва, Россия
+    highlights:
+      - description: >-
+          Проводил семинары по анализу данных для студентов третьего курса;
+          получил оценку 4,5/5 от студентов.
+      - description: >-
+          Помогал проводить семинары Шестой летней школы по машинному обучению в
+          физике высоких энергий.
+      - description: >-
+          Построил модель прогнозирования добычи нефти для московского офиса
+          Saudi Aramco.
+
+  - company: Deeplight Ventures
+    cvBullets: false
+    role: Software Engineer
+    period: фев 2019 – фев 2020
+    location: Москва, Россия
+    highlights:
+      - description: >-
+          Занял второе место в соревновании по сегментации изображений нефтяного
+          пласта.
+      - description: Построил модель прогнозирования отказа насосов.
+      - description: >-
+          Реализовал процедуру оптимизации геолого-технических мероприятий на
+          нефтяном месторождении.
+
+  - company: Сбербанк
+    cvBullets: false
+    role: Data Science Intern
+    period: авг 2017 – сен 2017
+    location: Москва, Россия
+    highlights:
+      - description: Спроектировал и подготовил датасет для NLP-соревнования.
+
+projects:
+  - slug: k8s
+    name: k8s.leonid.sh
+    description: >-
+      Персональная Kubernetes-платформа в Yandex Cloud. Облачные ресурсы —
+      кластер, сеть, managed PostgreSQL, registry, DNS, хранилище секретов —
+      описаны как код в Terraform и разворачиваются Ansible; всё, что работает
+      поверх, доставляется Argo CD из Git. Платформенный слой включает Envoy
+      Gateway с cert-manager и ExternalDNS для ingress и сертификатов, External
+      Secrets для доступов и self-hosted Prometheus, Grafana и Loki для
+      мониторинга, алертинга и логов. На ней живут остальные проекты отсюда.
+    href: https://github.com/matyushinleonid/k8s.leonid.sh
+    argocdApp: argocd
+    status: running
+    technologies: [Kubernetes, Terraform, Ansible, Argo CD, Envoy, Prometheus]
+
+  - slug: sein
+    name: sein-zum-tode
+    description: >-
+      Telegram-бот, предназначенный для того, чтобы помочь пользователю пережить
+      перспективу смерти как явления, которое произойдёт и, более того, **уже
+      происходит** непосредственно с ним. Пользователю предлагается ответить на
+      ряд вопросов, после чего средствами LLM будет приблизительно оценена
+      оставшаяся продолжительность его жизни. Основную ценность представляет
+      ежедневно уменьшающееся число оставшихся дней, которое бот будет
+      регулярно присылать пользователю. Каждый диалог — workflow в Temporal,
+      PostgreSQL — основная база, а Redis хранит чувствительные ответы лишь
+      временно, из соображений приватности.
+    href: https://github.com/matyushinleonid/sein-zum-tode
+    argocdApp: sein-zum-tode
+    status: running
+    technologies: [Python, aiogram, Temporal, OpenAI API, PostgreSQL, Redis]
+    extraLink:
+      label: "@SeinZumTodeBot"
+      href: https://t.me/SeinZumTodeBot
+
+  - slug: minecraft
+    name: minecraft.leonid.sh
+    description: >-
+      «Киркой по голове» — Minecraft-сервер, живущий в персональном
+      Kubernetes-кластере: мир хранится на персистентном облачном диске, релизы
+      приезжают через Argo CD. Рендерер BlueMap публикует карту мира, которую
+      можно открыть в браузере.
+    href: https://github.com/matyushinleonid/k8s.leonid.sh/tree/main/argocd/minecraft
+    argocdApp: minecraft
+    status: running
+    technologies: [Kubernetes, Helm, Argo CD]
+    extraLink:
+      label: map.minecraft.leonid.sh
+      href: https://map.minecraft.leonid.sh
+
+stack:
+  - group: languages
+    items: [Go, Python]
+  - group: clouds
+    items: [AWS, Yandex Cloud, Hetzner Cloud, Nebius Cloud]
+  - group: platform
+    items:
+      [
+        Kubernetes,
+        Docker,
+        Docker Compose,
+        Helm,
+        Timoni,
+        Argo CD,
+        Argo Workflows,
+      ]
+  - group: delivery
+    items: [Git, GitHub Actions, GitLab CI, TeamCity]
+  - group: backend & workflow
+    items: [Airflow, FastAPI, Flask, Temporal]
+  - group: data
+    items: [PostgreSQL, MongoDB, YDB, Redis, RabbitMQ, AWS SQS]
+  - group: observability
+    items: [Prometheus, Grafana, Loki]
+  - group: machine learning
+    items:
+      [
+        PyTorch,
+        TensorFlow,
+        PyTorch Lightning,
+        TorchServe,
+        OpenVINO,
+        TensorRT,
+        Pandas,
+        NumPy,
+        scikit-learn,
+        CatBoost,
+        XGBoost,
+      ]
+  - group: spoken languages
+    items: [English, Russian]
+
+education:
+  - degree: Магистратура, CDISE / Факультет компьютерных наук
+    institution: Skotech / Высшая школа экономики
+    location: Москва, Россия
+    period: сен 2018 – июн 2020
+  - degree: Бакалавриат, факультет математики
+    institution: Высшая школа экономики
+    location: Москва, Россия
+    period: сен 2014 – июл 2018
+  - degree: 11-й класс школы
+    institution: СУНЦ МГУ имени М. В. Ломоносова
+    location: Москва, Россия
+    period: сен 2013 – июн 2014
+
+achievements:
+  - name: Rosneft Seismic Challenge
+    period: окт 2019 – дек 2019
+    organization: boosters.pro
+    description: >-
+      Международное соревнование по компьютерному зрению в сегментации
+      сейсмических изображений. Занял 2-е место среди 98 команд-участниц.
+  - name: Курс System Design
+    period: янв 2023 – фев 2023
+    organization: karpov.courses
+    description: >-
+      С отличием завершил продвинутый курс по проектированию распределённых
+      высоконагруженных систем.
+
+  - name: Силовые тренировки и трансформация тела
+    period: апр 2024 – н. в.
+    description: >-
+      Добился долгосрочной рекомпозиции тела: сбросил более 28 кг веса,
+      одновременно набрав значительную мышечную массу, продемонстрировав
+      дисциплину, последовательность и нацеленность тренировок на результат.
+
+links:
+  - label: GitHub
+    href: https://github.com/matyushinleonid
+  - label: LinkedIn
+    href: https://linkedin.com/in/matyushinleonid
+  - label: Telegram
+    href: https://t.me/matyushinleonid

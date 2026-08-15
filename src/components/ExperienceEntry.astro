@@ -1,0 +1,52 @@
+---
+import type { Highlight } from "../data/site";
+import RichText from "./RichText.astro";
+
+interface Props {
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  highlights: Highlight[];
+  index: number;
+}
+
+const { company, role, period, location, highlights, index } = Astro.props;
+---
+
+<article class="experience-entry">
+  <div class="experience-index" aria-hidden="true">
+    {String(index + 1).padStart(2, "0")}
+  </div>
+  <div class="experience-content">
+    <header class="experience-header">
+      <div>
+        <h3>{company}</h3>
+        <p class="experience-role">{role}</p>
+      </div>
+      <div class="experience-meta">
+        <span>{period}</span>
+        <span>{location}</span>
+      </div>
+    </header>
+    <ul class="experience-highlights">
+      {
+        highlights.map((highlight) => (
+          <li>
+            {highlight.title && <strong>{highlight.title}</strong>}
+            <span>
+              <RichText text={highlight.description} />
+            </span>
+            {highlight.technologies && (
+              <ul class="tag-list" aria-label="Technologies">
+                {highlight.technologies.map((technology) => (
+                  <li>{technology}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</article>

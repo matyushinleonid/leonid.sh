@@ -1,0 +1,289 @@
+meta:
+  title: Leonid Matyushin — Software Engineer
+  description: >-
+    Leonid Matyushin is a software engineer focused on backend systems,
+    Kubernetes, delivery automation, and infrastructure.
+
+nav:
+  experience: experience
+  projects: projects
+  stack: stack
+  education: education
+
+hero:
+  name: Leonid Matyushin
+  role: Software Engineer
+  location: Moscow, Russia
+  primaryAction: inspect experience
+  cvAction: download CV
+
+labels:
+  selectedExperience: experience
+  projects: personal projects
+  stack: skills
+  education: education
+  achievements: other achievements
+  source: source
+  portrait: Leonid Matyushin
+  layout: layout
+
+contact:
+  email: matyushinleonid@gmail.com
+  site: leonid.sh
+  telegram: "@matyushinleonid"
+
+experience:
+  - company: Nebius
+    role: Software Engineer
+    period: Aug 2023 – Nov 2025
+    location: Amsterdam, Netherlands
+    highlights:
+      - title: "HWaaS: Disk Replacement Automation"
+        description: >-
+          Designed and implemented infrastructure that fully automated
+          failed-disk replacement, in particular the creation of Jira tickets for
+          data-center engineers. I built the solution as part of a Kubernetes
+          operator and added a mechanism that disables automatic replacement when
+          monitoring behaves anomalously. The system has performed 1,000+
+          disk replacements across 4+ regions for YDB and an in-house S3-compatible
+          object storage. Extended the operator gRPC API, performed CRD
+          migrations, agreed failure scopes and regional rollout order with SREs
+          and managers, and set up monitoring and alerting.
+        technologies: [Go, Kubebuilder]
+      - title: "HWaaS: Automated Deployment"
+        description: >-
+          Designed and implemented an automated Kubernetes build and deployment
+          process for the HWaaS service, which ships as a set of tightly coupled
+          Kubernetes resources. Adopted GitOps delivery so releases became
+          reversible, faster, and transparent to other developers.
+        technologies:
+          [Kubernetes, TeamCity, Timoni, Helm, Argo CD, Argo Workflows]
+      - title: "Dubformer: Media Processing Backend"
+        description: >-
+          Designed and implemented machine translation and text-to-speech
+          microservices and integrated them into the automatic video translation
+          pipeline. Developed REST APIs for individual services and for the
+          pipeline as a whole.
+        technologies: [Python, Airflow, FastAPI, MongoDB, AWS SQS, AWS S3]
+      - title: "Dubformer: Infrastructure Engineering"
+        description: >-
+          Built monitoring and alerting that exposed backend behavior and load
+          through dashboards and enabled rapid incident response through
+          messenger notifications. Implemented CI/CD pipelines and reduced the
+          total build and test time from 60 to 10 minutes.
+        technologies: [Docker, GitHub Actions, Grafana, Prometheus]
+
+  - company: NtechLab
+    role: Software Engineer
+    period: Nov 2020 – Aug 2023
+    location: Moscow, Russia
+    highlights:
+      - title: Speed and Memory Benchmarking Service
+        description: >-
+          Designed and implemented an internal service for benchmarking inference
+          speed and memory consumption of computer vision models developed in the
+          R&D department. Exposed a REST API and built CLI and SDK interfaces on
+          top of it. Proactively collected feedback and drove adoption across
+          multiple teams, including object detection, face recognition, and
+          license plate recognition, significantly reducing research iteration
+          time.
+        technologies: [Python, Celery, PostgreSQL, RabbitMQ]
+      - title: Data Labeling Pipelines
+        description: >-
+          Developed Airflow pipelines that automated data-labeling workflows for
+          image-classification tasks in the R&D department.
+        technologies: [Python, Airflow, Yandex Toloka]
+      - title: NSFW Image Classification
+        description: >-
+          Developed an NSFW content-detection model that outperformed popular
+          open-source alternatives on public and internally created benchmarks,
+          then deployed it to customer infrastructure.
+        technologies:
+          [Python, PyTorch, PyTorch Lightning, TorchServe, Albumentations]
+      - title: Falling People Detection
+        description: >-
+          Developed a falling-people detection model using a domain-adapted
+          neural network on top of an open-source skeletal-pose model. Achieved a
+          high true-positive rate at an extremely low false-positive rate on
+          benchmarks I collected myself, and owned the lifecycle from data
+          collection and labeling through product integration.
+        technologies: [Python, PyTorch, TensorRT, OpenVINO]
+      - title: Acceleration of the Facial Recognition Model
+        description: >-
+          Accelerated the GPU face-recognition model by 10% without accuracy loss
+          by using neural-architecture-search techniques to identify a better
+          backbone.
+        technologies: [Python, PyTorch]
+
+  - company: Laboratory of Methods for Big Data Analysis
+    cvBullets: false
+    role: Research Intern
+    period: Jan 2020 – Nov 2020
+    location: Moscow, Russia
+    highlights:
+      - description: >-
+          Conducted seminars for a third-year undergraduate Data Analysis course
+          and received a 4.5/5 student rating.
+      - description: >-
+          Assisted with seminars at the Sixth Machine Learning in High Energy
+          Physics Summer School.
+      - description: >-
+          Built an oil-production prediction model for the Saudi Aramco Moscow
+          office.
+
+  - company: Deeplight Ventures
+    cvBullets: false
+    role: Software Engineer
+    period: Feb 2019 – Feb 2020
+    location: Moscow, Russia
+    highlights:
+      - description: >-
+          Won second prize in an oil-reservoir image-segmentation competition.
+      - description: Built a pump-failure prediction model.
+      - description: >-
+          Implemented an optimization procedure for well interventions on an oil
+          field.
+
+  - company: Sberbank
+    cvBullets: false
+    role: Data Science Intern
+    period: Aug 2017 – Sep 2017
+    location: Moscow, Russia
+    highlights:
+      - description: Designed and developed a dataset for an NLP contest.
+
+projects:
+  - slug: k8s
+    name: k8s.leonid.sh
+    description: >-
+      A personal Kubernetes platform on Yandex Cloud. Cloud resources —
+      cluster, network, managed PostgreSQL, registry, DNS, secret storage — are
+      declared as code in Terraform and bootstrapped with Ansible; every
+      workload on top is delivered by Argo CD from Git. The platform layer
+      carries Envoy Gateway with cert-manager and ExternalDNS for ingress and
+      certificates, External Secrets for credentials, and self-hosted Prometheus,
+      Grafana, and Loki for monitoring, alerting, and logs. It hosts the rest of
+      the projects here.
+    href: https://github.com/matyushinleonid/k8s.leonid.sh
+    argocdApp: argocd
+    status: running
+    technologies: [Kubernetes, Terraform, Ansible, Argo CD, Envoy, Prometheus]
+
+  - slug: sein
+    name: sein-zum-tode
+    description: >-
+      A Telegram bot intended to help users confront the prospect of death as
+      something that will happen and, moreover, **is already happening** to
+      them. The user is asked a series of questions, after which an LLM
+      estimates roughly how much of their life is left. The value of it is the
+      daily shrinking number of remaining days, which the bot keeps sending.
+      Each conversation runs as a Temporal
+      workflow, PostgreSQL is the main database, and Redis keeps the sensitive
+      answers only temporarily, for privacy.
+    href: https://github.com/matyushinleonid/sein-zum-tode
+    argocdApp: sein-zum-tode
+    status: running
+    technologies: [Python, aiogram, Temporal, OpenAI API, PostgreSQL, Redis]
+    extraLink:
+      label: "@SeinZumTodeBot"
+      href: https://t.me/SeinZumTodeBot
+
+  - slug: minecraft
+    name: minecraft.leonid.sh
+    description: >-
+      «Киркой по голове», a Minecraft server running on the personal
+      Kubernetes cluster with its world on a persistent
+      cloud disk and its releases delivered by Argo CD. A BlueMap renderer
+      publishes a browsable map of the world.
+    href: https://github.com/matyushinleonid/k8s.leonid.sh/tree/main/argocd/minecraft
+    argocdApp: minecraft
+    status: running
+    technologies: [Kubernetes, Helm, Argo CD]
+    extraLink:
+      label: map.minecraft.leonid.sh
+      href: https://map.minecraft.leonid.sh
+
+stack:
+  - group: languages
+    items: [Go, Python]
+  - group: clouds
+    items: [AWS, Yandex Cloud, Hetzner Cloud, Nebius Cloud]
+  - group: platform
+    items:
+      [
+        Kubernetes,
+        Docker,
+        Docker Compose,
+        Helm,
+        Timoni,
+        Argo CD,
+        Argo Workflows,
+      ]
+  - group: delivery
+    items: [Git, GitHub Actions, GitLab CI, TeamCity]
+  - group: backend & workflow
+    items: [Airflow, FastAPI, Flask, Temporal]
+  - group: data
+    items: [PostgreSQL, MongoDB, YDB, Redis, RabbitMQ, AWS SQS]
+  - group: observability
+    items: [Prometheus, Grafana, Loki]
+  - group: machine learning
+    items:
+      [
+        PyTorch,
+        TensorFlow,
+        PyTorch Lightning,
+        TorchServe,
+        OpenVINO,
+        TensorRT,
+        Pandas,
+        NumPy,
+        scikit-learn,
+        CatBoost,
+        XGBoost,
+      ]
+  - group: spoken languages
+    items: [English, Russian]
+
+education:
+  - degree: MSc, CDISE / Faculty of Computer Science
+    institution: Skotech / Higher School of Economics
+    location: Moscow, Russia
+    period: Sep 2018 – Jun 2020
+  - degree: BSc, Faculty of Mathematics
+    institution: Higher School of Economics
+    location: Moscow, Russia
+    period: Sep 2014 – Jul 2018
+  - degree: Final Year of Secondary School
+    institution: AESC, Lomonosov Moscow State University
+    location: Moscow, Russia
+    period: Sep 2013 – Jun 2014
+
+achievements:
+  - name: Rosneft Seismic Challenge
+    period: Oct 2019 – Dec 2019
+    organization: boosters.pro
+    description: >-
+      International computer vision competition in seismic image segmentation.
+      Achieved 2nd place out of 98 participating teams.
+  - name: System Design Course
+    period: Jan 2023 – Feb 2023
+    organization: karpov.courses
+    description: >-
+      Completed an advanced course on designing distributed, high-load systems
+      and graduated with honors.
+
+  - name: Strength Training and Physical Transformation
+    period: Apr 2024 – present
+    description: >-
+      Achieved a long-term body recomposition by losing over 28 kg of body weight
+      while building significant muscle mass, demonstrating discipline,
+      consistency, and goal-oriented training.
+
+links:
+  - label: GitHub
+    href: https://github.com/matyushinleonid
+  - label: LinkedIn
+    href: https://linkedin.com/in/matyushinleonid
+  - label: Telegram
+    href: https://t.me/matyushinleonid

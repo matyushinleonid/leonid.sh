@@ -1,0 +1,112 @@
+name: Release
+
+run-name: Release v${{ inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version without the v prefix
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Promote image and create release
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: cr.yandex/${{ vars.YC_REGISTRY_ID }}/${{ vars.YC_REGISTRY_REPOSITORY }}
+      VERSION: ${{ inputs.version }}
+    steps:
+      - name: Require main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "Releases must be dispatched from main, got ${GITHUB_REF}." >&2
+          exit 1
+
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Validate release version
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          test "$(node -p "require('./package.json').version")" = "$VERSION"
+          test "$(sed -n 's/^version: //p' deploy/helm/leonid-sh/Chart.yaml)" = "$VERSION"
+          test "$(sed -n 's/^appVersion: //p' deploy/helm/leonid-sh/Chart.yaml | tr -d '"')" = "$VERSION"
+          ! git rev-parse "v$VERSION" >/dev/null 2>&1
+
+      - name: Require a successful CI run for this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          conclusion="$(gh run list --workflow ci.yml --branch main --commit "$GITHUB_SHA" --event push --limit 1 --json conclusion --jq '.[0].conclusion // ""')"
+          test "$conclusion" = "success"
+
+      - name: Log in to Yandex Container Registry
+        uses: yc-actions/yc-cr-login@v3
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Promote tested commit image
+        shell: bash
+        run: |
+          set -euo pipefail
+          minor="${VERSION%.*}"
+          docker buildx imagetools create \
+            --tag "$IMAGE:$VERSION" \
+            --tag "$IMAGE:$minor" \
+            "$IMAGE:sha-$GITHUB_SHA"
+
+      - name: Update deployment image tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+
+          path = Path("deploy/helm/leonid-sh/values.yaml")
+          source = path.read_text()
+          updated, count = re.subn(
+              r"(?m)^(image:\n(?:  .*\n)*?  tag:)\s*.*$",
+              rf'\1 "{os.environ["VERSION"]}"',
+              source,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit("could not update image.tag")
+          path.write_text(updated)
+          PY
+
+      - name: Commit deployment tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add deploy/helm/leonid-sh/values.yaml
+          git commit -m "chore(deploy): v$VERSION [skip ci]"
+          git push origin HEAD:main
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "v$VERSION" --target "$GITHUB_SHA" --generate-notes
