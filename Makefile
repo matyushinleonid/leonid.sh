@@ -6,10 +6,10 @@ install:
 	npm ci
 
 run:
-	docker compose up --build
+	docker compose --profile $(if $(PROD),prod,dev) up --build
 
 stop:
-	docker compose down
+	docker compose --profile dev --profile prod down
 
 check:
 	npm run format:check

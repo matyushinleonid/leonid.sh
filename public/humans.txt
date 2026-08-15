@@ -1,0 +1,29 @@
+/* TEAM */
+
+Engineer: Leonid Matyushin
+Site: leonid.sh
+GitHub: @matyushinleonid
+Telegram: @matyushinleonid
+Location: Moscow, Russia
+
+/* SITE */
+
+Standards: HTML5, CSS, ECMAScript
+Components: Astro, TypeScript, nginx
+Software: Kubernetes, Argo CD, Helm, XeLaTeX
+Source: github.com/matyushinleonid/leonid.sh
+Hosted: a personal Kubernetes cluster, Yandex Cloud
+Language: English, Russian
+
+/* DESIGN */
+
+Style: teletext
+Palette: #000000 #ffff00 #00ffff #00ff00 #ff00ff #ff0000
+Type: monospace, whatever your machine already has
+Pages: 100 index, 101 projects, 102 experience, 103 skills,
+       104 education, 105 achievements, 888 subtitles
+
+The CV on this site and the PDF beside it are generated from the same two
+YAML files, so they cannot disagree.
+
+Try typing a page number.

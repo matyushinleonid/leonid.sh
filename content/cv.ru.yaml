@@ -23,7 +23,7 @@ labels:
   stack: навыки
   education: образование
   achievements: другие достижения
-  source: исходники
+  source: source
   portrait: Леонид Матюшин
 
 contact:
@@ -168,7 +168,7 @@ projects:
     technologies: [Kubernetes, Terraform, Ansible, Argo CD, Envoy, Prometheus]
 
   - slug: sein
-    name: sein-zum-tode
+    name: sein zum tode
     description: >-
       Telegram-бот, предназначенный для того, чтобы помочь пользователю пережить
       перспективу смерти как явления, которое произойдёт и, более того, **уже
@@ -197,6 +197,7 @@ projects:
     href: https://github.com/matyushinleonid/k8s.leonid.sh/tree/main/argocd/minecraft
     argocdApp: minecraft
     status: running
+    cvEntry: false
     technologies: [Kubernetes, Helm, Argo CD]
     extraLink:
       label: map.minecraft.leonid.sh

@@ -242,7 +242,9 @@ function experience(cv, labels) {
 }
 
 function projects(cv, labels) {
-  const entries = cv.projects ?? [];
+  const entries = (cv.projects ?? []).filter(
+    (entry) => entry.cvEntry !== false,
+  );
   const lines = [
     "%-----------PROJECTS-----------------",
     `\\section{${tex(labels.projects)}}`,

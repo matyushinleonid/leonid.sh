@@ -97,7 +97,9 @@ function experience(cv) {
 
 function projects(cv) {
   const blocks = [];
-  for (const entry of cv.projects ?? []) {
+  for (const entry of (cv.projects ?? []).filter(
+    (project) => project.cvEntry !== false,
+  )) {
     const meta = [link({ label: "GitHub", href: entry.href })];
     if (entry.extraLink) {
       meta.push(link(entry.extraLink));
