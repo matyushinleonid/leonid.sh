@@ -75,7 +75,6 @@ export type SiteCopy = {
     achievements: string;
     source: string;
     portrait: string;
-    layout: string;
   };
   contact: {
     email: string;

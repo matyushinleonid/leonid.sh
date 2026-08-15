@@ -7,23 +7,6 @@
       "type": "integer",
       "minimum": 1
     },
-    "design": {
-      "type": "string",
-      "description": "Layout variant to pin. Empty keeps the in-page switcher.",
-      "enum": [
-        "",
-        "atlas",
-        "bento",
-        "luna",
-        "crt",
-        "ceefax",
-        "teletext",
-        "vhs",
-        "web1",
-        "zine",
-        "guestbook"
-      ]
-    },
     "image": {
       "type": "object",
       "required": ["repository", "pullPolicy", "tag", "digest"],

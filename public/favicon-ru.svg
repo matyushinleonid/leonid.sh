@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#000000" />
+  <text
+    x="32"
+    y="32"
+    fill="#ffff00"
+    font-family="SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace"
+    font-size="44"
+    font-weight="700"
+    text-anchor="middle"
+    dominant-baseline="central"
+  >Л</text>
+</svg>
