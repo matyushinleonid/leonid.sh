@@ -1643,3 +1643,13 @@ html[data-reveal] .reveal-key i::before {
   color: #000;
   background: #fff;
 }
+
+.project-icon:hover {
+  border-color: #fff;
+}
+
+.project-icon:focus-visible {
+  border-color: #fff;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

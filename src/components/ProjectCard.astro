@@ -39,9 +39,15 @@ const image = artwork[slug];
 ---
 
 <article class="project-entry" data-project={slug}>
-  <span class="project-icon">
+  <a
+    class="project-icon"
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+    aria-label={`${name} — GitHub`}
+  >
     <Image src={image} alt="" width={160} densities={[1, 2]} loading="lazy" />
-  </span>
+  </a>
 
   <a
     class="project-visual"
