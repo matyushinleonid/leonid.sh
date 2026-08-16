@@ -1,8 +1,8 @@
 meta:
   title: Леонид Матюшин — Software Engineer
   description: >-
-    Леонид Матюшин — software engineer, специализирующийся на бэкенд-системах,
-    Kubernetes, автоматизации поставки и инфраструктуре.
+    Software Engineer — бэкенд, распределённые системы, облачная и
+    ML-инфраструктура. Опыт промышленной разработки в Nebius и NtechLab.
 
 nav:
   experience: опыт
@@ -168,7 +168,7 @@ projects:
     technologies: [Kubernetes, Terraform, Ansible, Argo CD, Envoy, Prometheus]
 
   - slug: sein
-    name: sein zum tode
+    name: Sein zum Tode
     description: >-
       Telegram-бот, предназначенный для того, чтобы помочь пользователю пережить
       перспективу смерти как явления, которое произойдёт и, более того, **уже

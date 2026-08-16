@@ -172,13 +172,16 @@ const PREAMBLE = String.raw`%-------------------------
 `;
 
 function heading(cv, labels) {
-  const { hero = {}, contact = {} } = cv;
+  const { hero = {}, contact = {}, meta = {} } = cv;
   return [
     "%----------HEADING-----------------",
     "\\begin{tabular*}{\\textwidth}{l@{\\extracolsep{\\fill}}r}",
     `  \\textbf{\\href{${SITE_URL}}{\\Large ${tex(hero.name)}}} & ${tex(labels.email)} : \\href{mailto:${contact.email}}{${tex(contact.email)}}\\\\`,
     `  \\href{${SITE_URL}}{${tex(contact.site)}} & ${tex(labels.telegram)} : \\href{${TELEGRAM_URL}}{${tex(contact.telegram)}} \\\\`,
     "\\end{tabular*}",
+    "",
+    "\\vspace{5pt}",
+    `{\\small ${tex(meta.description)}}`,
   ].join("\n");
 }
 

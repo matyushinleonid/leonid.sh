@@ -9,6 +9,7 @@ import { load } from "js-yaml";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
 
+const CANONICAL = "https://leonid.sh/en/";
 const EMOJI = "https://github.githubassets.com/images/icons/emoji";
 const SHIPIT = `<img src="${EMOJI}/shipit.png" width="50"/>`;
 const SUSPECT = `<img src="${EMOJI}/suspect.png" width="20"/>`;
@@ -69,6 +70,8 @@ function heading(en, ru) {
     `#### ${text(en.hero.location)}`,
     "",
     en.links.map(link).join(" · "),
+    "",
+    text(en.meta.description),
   ].join("\n");
 }
 
@@ -147,8 +150,13 @@ function achievements(cv) {
   return `## Other Achievements\n\n${blocks.join("\n\n")}`;
 }
 
+function frontMatter() {
+  return ["---", `canonical_url: ${CANONICAL}`, "---"].join("\n");
+}
+
 function render(en, ru) {
   const sections = [
+    frontMatter(),
     heading(en, ru),
     experience(en),
     projects(en),

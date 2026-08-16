@@ -1653,3 +1653,12 @@ html[data-reveal] .reveal-key i::before {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+.hero-summary {
+  max-width: 58ch;
+  margin: 12px 0 0;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  line-height: 1.65;
+}
