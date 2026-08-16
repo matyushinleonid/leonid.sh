@@ -2,7 +2,7 @@
 
 ARG NODE_VERSION=26.5.1
 ARG NGINX_VERSION=1.31.3
-ARG TEXLIVE_VERSION=latest-medium@sha256:603b473bbd9781055185395689c873b74875500f4faf53f75c139935c4c93384
+ARG TEXLIVE_VERSION=latest-full@sha256:b8c2577b400313f356c8746b7778a3370792922d0b8e5199d8f271d5a5fcb42f
 
 FROM node:${NODE_VERSION}-alpine AS dependencies
 
@@ -29,15 +29,8 @@ RUN node scripts/generate-cv.mjs
 
 FROM texlive/texlive:${TEXLIVE_VERSION} AS cv-pdf
 
-ARG CTAN_REPOSITORY=https://www.texlive.info/tlnet-archive/2026/08/16/tlnet
-RUN for attempt in 1 2 3 4 5; do \
-      tlmgr --repository "${CTAN_REPOSITORY}" install preprint titlesec cm-unicode babel-russian hyphen-russian \
-        && break; \
-      echo "tlmgr attempt ${attempt} failed, retrying" >&2; \
-      sleep 10; \
-    done; \
-    for file in titlesec.sty fullpage.sty cmunrm.otf; do \
-      kpsewhich "${file}" >/dev/null || { echo "tlmgr did not provide ${file}" >&2; exit 1; }; \
+RUN for file in titlesec.sty fullpage.sty cmunrm.otf russianb.ldf; do \
+      kpsewhich "${file}" >/dev/null || { echo "base image is missing ${file}" >&2; exit 1; }; \
     done
 
 WORKDIR /cv
