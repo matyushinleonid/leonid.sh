@@ -1,8 +1,9 @@
 meta:
   title: Leonid Matyushin — Software Engineer
   description: >-
-    Leonid Matyushin is a software engineer focused on backend systems,
-    Kubernetes, delivery automation, and infrastructure.
+    Software Engineer — backend, distributed systems, cloud and ML
+    infrastructure. Experience building production-grade software at Nebius and
+    NtechLab.
 
 nav:
   experience: experience
@@ -169,7 +170,7 @@ projects:
     technologies: [Kubernetes, Terraform, Ansible, Argo CD, Envoy, Prometheus]
 
   - slug: sein
-    name: sein zum tode
+    name: Sein zum Tode
     description: >-
       A Telegram bot intended to help users confront the prospect of death as
       something that will happen and, moreover, **is already happening** to
