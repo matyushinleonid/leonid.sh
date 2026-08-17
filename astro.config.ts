@@ -5,16 +5,12 @@ export default defineConfig({
   site: "https://leonid.sh",
   output: "static",
   trailingSlash: "always",
-  integrations: [
-    sitemap({
-      filter: (page) => new URL(page).pathname !== "/",
-    }),
-  ],
+  integrations: [sitemap()],
   i18n: {
     defaultLocale: "en",
     locales: ["en", "ru"],
     routing: {
-      prefixDefaultLocale: true,
+      prefixDefaultLocale: false,
       redirectToDefaultLocale: false,
     },
   },

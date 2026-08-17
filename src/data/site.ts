@@ -140,3 +140,9 @@ export const siteCopy: Record<Locale, SiteCopy> = {
 export function cvHref(locale: Locale): string {
   return `/cv/leonid-matyushin-${locale}.pdf`;
 }
+
+export const defaultLocale: Locale = "en";
+
+export function localeHref(locale: Locale): string {
+  return locale === defaultLocale ? "/" : `/${locale}/`;
+}

@@ -31,5 +31,7 @@ Four fields exist for the PDF and the markdown render alone:
 `experience[].cvBullets: false`, `projects[].cvEntry: false`,
 `education[].location`, `achievements[].organization`.
 
-Routes are `/en/` and `/ru/`; `/` redirects by remembered choice or browser
-locale. The PDFs are build artifacts and are not committed.
+English is served at `/` and Russian at `/ru/`; `/en/` 301s to `/`. nginx sends
+a visitor whose first `Accept-Language` tag is `ru` to `/ru/`, unless a `locale`
+cookie — set by the header switcher — says otherwise. The PDFs are build
+artifacts and are not committed.
