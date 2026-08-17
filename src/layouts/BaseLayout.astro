@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 
-import { siteCopy, type Locale } from "../data/site";
+import { localeHref, siteCopy, type Locale } from "../data/site";
 
 interface Props {
   locale: Locale;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { locale, title, description } = Astro.props;
-const canonical = new URL(`/${locale}/`, Astro.site);
+const canonical = new URL(localeHref(locale), Astro.site);
 const siteName = siteCopy[locale].hero.name;
 ---
 
@@ -32,12 +32,12 @@ const siteName = siteCopy[locale].hero.name;
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={new URL("/en/", Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL("/", Astro.site)} />
     <link rel="alternate" hreflang="ru" href={new URL("/ru/", Astro.site)} />
     <link
       rel="alternate"
       hreflang="x-default"
-      href={new URL("/en/", Astro.site)}
+      href={new URL("/", Astro.site)}
     />
     <title>{title}</title>
   </head>
@@ -51,11 +51,15 @@ const siteName = siteCopy[locale].hero.name;
       document.querySelectorAll("[data-locale]").forEach((link) => {
         link.addEventListener("click", () => {
           const locale = link.getAttribute("data-locale");
-          if (locale) {
-            try {
-              window.localStorage.setItem("leonid.locale", locale);
-            } catch {}
-          }
+          if (!locale) return;
+          const year = 60 * 60 * 24 * 365;
+          document.cookie =
+            "locale=" +
+            locale +
+            "; path=/; max-age=" +
+            year +
+            "; samesite=lax" +
+            (location.protocol === "https:" ? "; secure" : "");
         });
       });
     </script>

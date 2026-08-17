@@ -9,7 +9,7 @@ import { load } from "js-yaml";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = join(ROOT, "content");
 
-const CANONICAL = "https://leonid.sh/en/";
+const CANONICAL = "https://leonid.sh/";
 const EMOJI = "https://github.githubassets.com/images/icons/emoji";
 const SHIPIT = `<img src="${EMOJI}/shipit.png" width="50"/>`;
 const SUSPECT = `<img src="${EMOJI}/suspect.png" width="20"/>`;

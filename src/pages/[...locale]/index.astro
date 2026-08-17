@@ -4,11 +4,21 @@ import { Image } from "astro:assets";
 import portrait from "../../assets/images/portrait.jpg";
 import ExperienceEntry from "../../components/ExperienceEntry.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
-import { cvHref, locales, siteCopy, type Locale } from "../../data/site";
+import {
+  cvHref,
+  defaultLocale,
+  localeHref,
+  locales,
+  siteCopy,
+  type Locale,
+} from "../../data/site";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export function getStaticPaths() {
-  return locales.map((locale) => ({ params: { locale }, props: { locale } }));
+  return locales.map((locale) => ({
+    params: { locale: locale === defaultLocale ? undefined : locale },
+    props: { locale },
+  }));
 }
 
 interface Props {
@@ -60,7 +70,7 @@ const next = locale === "ru" ? "Следующие проекты" : "Next proje
 >
   <header class="site-header">
     <div class="shell header-inner">
-      <a class="wordmark" href={`/${locale}/`} aria-label={homeLabel}>
+      <a class="wordmark" href={localeHref(locale)} aria-label={homeLabel}>
         <span aria-hidden="true">~/</span>leonid
       </a>
 
@@ -74,7 +84,7 @@ const next = locale === "ru" ? "Следующие проекты" : "Next proje
       <div class="header-actions">
         <a
           class="locale-switch"
-          href={`/${alternateLocale}/`}
+          href={localeHref(alternateLocale)}
           data-locale={alternateLocale}
           aria-label={`Switch language to ${alternateLabel}`}
         >
