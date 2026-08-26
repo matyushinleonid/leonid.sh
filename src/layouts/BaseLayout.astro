@@ -11,7 +11,42 @@ interface Props {
 
 const { locale, title, description } = Astro.props;
 const canonical = new URL(localeHref(locale), Astro.site);
-const siteName = siteCopy[locale].hero.name;
+const copy = siteCopy[locale];
+const siteName = copy.hero.name;
+
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: copy.hero.name,
+  alternateName: siteCopy[locale === "en" ? "ru" : "en"].hero.name,
+  jobTitle: copy.hero.role,
+  description,
+  url: canonical.href,
+  address: copy.hero.location,
+  email: `mailto:${copy.contact.email}`,
+  knowsLanguage: ["en", "ru"],
+  knowsAbout: copy.stack.flatMap((group) => group.items),
+  alumniOf: copy.education.map((entry) => ({
+    "@type": "EducationalOrganization",
+    name: entry.institution,
+  })),
+  worksFor: copy.experience.map((entry) => ({
+    "@type": "Organization",
+    name: entry.company,
+  })),
+  sameAs: copy.links.map((link) => link.href),
+};
+
+const webPage = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonical.href,
+  inLanguage: locale === "ru" ? "ru-RU" : "en-US",
+  isPartOf: { "@type": "WebSite", name: siteName, url: Astro.site?.href },
+  about: { "@type": "Person", name: copy.hero.name },
+};
 ---
 
 <!doctype html>
@@ -40,6 +75,16 @@ const siteName = siteCopy[locale].hero.name;
       href={new URL("/", Astro.site)}
     />
     <title>{title}</title>
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(person)}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(webPage)}
+    />
   </head>
   <body>
     <a class="skip-link" href="#content">

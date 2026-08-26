@@ -12,6 +12,7 @@ make check          # formatting, Astro/TypeScript, static build
 make build          # production image, leonid-sh:local
 make cv             # both CV PDFs into public/cv/
 make markdown FILE=<path>   # render the CV as github.io-style markdown
+make indexnow               # ping IndexNow (Yandex) after a deploy
 ```
 
 Docker is the only requirement. Without it: Node 26, then `npm ci && npm run dev`.
