@@ -53,6 +53,7 @@ type Achievement = {
 export type SiteCopy = {
   meta: {
     title: string;
+    updated: string;
     description: string;
   };
   nav: {
@@ -119,6 +120,10 @@ function loadCopy(locale: Locale, source: string): SiteCopy {
     if (copy?.[key] === undefined) {
       throw new Error(`content/cv.${locale}.yaml is missing "${key}"`);
     }
+  }
+
+  if (Number.isNaN(new Date(String(copy.meta.updated)).valueOf())) {
+    throw new Error(`content/cv.${locale}.yaml has an invalid "meta.updated"`);
   }
 
   for (const project of copy.projects) {
