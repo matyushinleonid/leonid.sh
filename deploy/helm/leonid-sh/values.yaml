@@ -33,9 +33,14 @@ tor:
   enabled: false
   onionAddress: ""
   keySecret: leonid-sh-onion-key
+  socks5:
+    host: ""
+    port: 32768
   externalSecret:
     refreshInterval: 15m
     lockboxSecretId: ""
+    socks5UsernameProperty: socks5_proxy_username
+    socks5PasswordProperty: socks5_proxy_password
   image:
     repository: osminogin/tor-simple
     tag: 0.4.9.11

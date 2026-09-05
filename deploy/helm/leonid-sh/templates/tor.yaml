@@ -1,18 +1,46 @@
 {{- if .Values.tor.enabled }}
 {{- $fullname := include "leonid-sh.fullname" . }}
-apiVersion: v1
-kind: ConfigMap
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
   name: {{ $fullname }}-tor
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "leonid-sh.labels" . | nindent 4 }}
-data:
-  torrc: |
-    SocksPort 0
-    DataDirectory /var/lib/tor/data
-    HiddenServiceDir /var/lib/tor/hs
-    HiddenServiceVersion 3
-    HiddenServicePort 80 {{ $fullname }}:{{ .Values.service.port }}
+spec:
+  refreshInterval: {{ .Values.tor.externalSecret.refreshInterval | quote }}
+  secretStoreRef:
+    name: yc-lockbox
+    kind: ClusterSecretStore
+  target:
+    name: {{ $fullname }}-tor
+    creationPolicy: Owner
+    template:
+      engineVersion: v2
+      type: Opaque
+      data:
+        torrc: |
+          SocksPort 0
+          DataDirectory /var/lib/tor/data
+          HiddenServiceDir /var/lib/tor/hs
+          HiddenServiceVersion 3
+          HiddenServicePort 80 {{ $fullname }}:{{ .Values.service.port }}
+          {{- if .Values.tor.socks5.host }}
+          Socks5Proxy {{ .Values.tor.socks5.host }}:{{ .Values.tor.socks5.port }}
+          Socks5ProxyUsername {{ `{{ .username }}` }}
+          Socks5ProxyPassword {{ `{{ .password }}` }}
+          {{- end }}
+  data:
+    - secretKey: username
+      remoteRef:
+        key: {{ .Values.tor.externalSecret.lockboxSecretId | quote }}
+        property: {{ .Values.tor.externalSecret.socks5UsernameProperty | quote }}
+        decodingStrategy: None
+    - secretKey: password
+      remoteRef:
+        key: {{ .Values.tor.externalSecret.lockboxSecretId | quote }}
+        property: {{ .Values.tor.externalSecret.socks5PasswordProperty | quote }}
+        decodingStrategy: None
 {{- if .Values.tor.externalSecret.lockboxSecretId }}
 ---
 apiVersion: external-secrets.io/v1
@@ -60,7 +88,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/torrc: {{ .Values.tor.onionAddress | sha256sum }}
+        checksum/torrc: {{ printf "%s|%s|%v" .Values.tor.onionAddress .Values.tor.socks5.host .Values.tor.socks5.port | sha256sum }}
       labels:
         {{- include "leonid-sh.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: tor
@@ -111,8 +139,9 @@ spec:
           emptyDir:
             sizeLimit: 32Mi
         - name: torrc
-          configMap:
-            name: {{ $fullname }}-tor
+          secret:
+            secretName: {{ $fullname }}-tor
+            defaultMode: 0440
         - name: onion-key
           secret:
             secretName: {{ .Values.tor.keySecret | quote }}
