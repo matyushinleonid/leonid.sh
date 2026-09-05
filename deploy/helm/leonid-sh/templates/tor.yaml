@@ -137,7 +137,7 @@ spec:
       volumes:
         - name: tor-state
           emptyDir:
-            sizeLimit: 32Mi
+            sizeLimit: {{ .Values.tor.stateSizeLimit }}
         - name: torrc
           secret:
             secretName: {{ $fullname }}-tor

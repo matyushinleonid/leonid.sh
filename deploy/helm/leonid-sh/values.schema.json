@@ -150,7 +150,14 @@
     },
     "tor": {
       "type": "object",
-      "required": ["enabled", "keySecret", "externalSecret", "image", "socks5"],
+      "required": [
+        "enabled",
+        "keySecret",
+        "externalSecret",
+        "image",
+        "socks5",
+        "stateSizeLimit"
+      ],
       "properties": {
         "enabled": {
           "type": "boolean"
@@ -222,6 +229,10 @@
               "maximum": 65535
             }
           }
+        },
+        "stateSizeLimit": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

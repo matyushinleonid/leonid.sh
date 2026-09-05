@@ -32,6 +32,7 @@ gemini:
 tor:
   enabled: false
   onionAddress: ""
+  stateSizeLimit: 512Mi
   keySecret: leonid-sh-onion-key
   socks5:
     host: ""
@@ -48,9 +49,9 @@ tor:
   resources:
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 64Mi
     limits:
-      memory: 128Mi
+      memory: 256Mi
 
 podAnnotations: {}
 podLabels: {}
