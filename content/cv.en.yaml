@@ -27,12 +27,14 @@ labels:
   achievements: other achievements
   source: source
   gemini: gemini mirror
+  onion: onion mirror
   portrait: Leonid Matyushin
 
 contact:
   email: matyushinleonid@gmail.com
   site: leonid.sh
   telegram: "@matyushinleonid"
+  onion: http://leonideoyh3d5l7mewj5tvfawu4eznjpmwqisk6njpijywgy22lvtjad.onion/
 
 experience:
   - company: Nebius

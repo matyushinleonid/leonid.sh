@@ -311,6 +311,9 @@ const next = locale === "ru" ? "Следующие проекты" : "Next proje
       <a href="gemini://leonid.sh/" class="gemini-link">
         {copy.labels.gemini}<span aria-hidden="true">↗</span>
       </a>
+      <a href={copy.contact.onion} class="onion-link">
+        {copy.labels.onion}<span aria-hidden="true">↗</span>
+      </a>
       <button type="button" class="reveal-key" data-reveal-key>
         <i aria-hidden="true"></i>{revealLabel}
       </button>

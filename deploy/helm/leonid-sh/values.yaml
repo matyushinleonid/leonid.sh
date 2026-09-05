@@ -29,6 +29,24 @@ gemini:
     limits:
       memory: 64Mi
 
+tor:
+  enabled: false
+  onionAddress: ""
+  keySecret: leonid-sh-onion-key
+  externalSecret:
+    refreshInterval: 15m
+    lockboxSecretId: ""
+  image:
+    repository: osminogin/tor-simple
+    tag: 0.4.9.11
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 128Mi
+
 podAnnotations: {}
 podLabels: {}
 

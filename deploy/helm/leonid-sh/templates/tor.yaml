@@ -1,0 +1,120 @@
+{{- if .Values.tor.enabled }}
+{{- $fullname := include "leonid-sh.fullname" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullname }}-tor
+  labels:
+    {{- include "leonid-sh.labels" . | nindent 4 }}
+data:
+  torrc: |
+    SocksPort 0
+    DataDirectory /var/lib/tor/data
+    HiddenServiceDir /var/lib/tor/hs
+    HiddenServiceVersion 3
+    HiddenServicePort 80 {{ $fullname }}:{{ .Values.service.port }}
+{{- if .Values.tor.externalSecret.lockboxSecretId }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ .Values.tor.keySecret }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "leonid-sh.labels" . | nindent 4 }}
+spec:
+  refreshInterval: {{ .Values.tor.externalSecret.refreshInterval | quote }}
+  secretStoreRef:
+    name: yc-lockbox
+    kind: ClusterSecretStore
+  target:
+    name: {{ .Values.tor.keySecret }}
+    creationPolicy: Owner
+  data:
+    - secretKey: hs_ed25519_secret_key
+      remoteRef:
+        key: {{ .Values.tor.externalSecret.lockboxSecretId | quote }}
+        property: hs_ed25519_secret_key
+        decodingStrategy: Base64
+    - secretKey: hs_ed25519_public_key
+      remoteRef:
+        key: {{ .Values.tor.externalSecret.lockboxSecretId | quote }}
+        property: hs_ed25519_public_key
+        decodingStrategy: Base64
+{{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}-tor
+  labels:
+    {{- include "leonid-sh.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "leonid-sh.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: tor
+  template:
+    metadata:
+      annotations:
+        checksum/torrc: {{ .Values.tor.onionAddress | sha256sum }}
+      labels:
+        {{- include "leonid-sh.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: tor
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: onion-key
+          image: "{{ .Values.tor.image.repository }}:{{ .Values.tor.image.tag }}"
+          imagePullPolicy: {{ .Values.tor.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /var/lib/tor/hs /var/lib/tor/data
+              cp /onion-key/hs_ed25519_secret_key /onion-key/hs_ed25519_public_key /var/lib/tor/hs/
+              chmod 700 /var/lib/tor/hs
+              chmod 600 /var/lib/tor/hs/hs_ed25519_secret_key /var/lib/tor/hs/hs_ed25519_public_key
+          volumeMounts:
+            - name: tor-state
+              mountPath: /var/lib/tor
+            - name: onion-key
+              mountPath: /onion-key
+              readOnly: true
+          resources:
+            {{- toYaml .Values.tor.resources | nindent 12 }}
+      containers:
+        - name: tor
+          image: "{{ .Values.tor.image.repository }}:{{ .Values.tor.image.tag }}"
+          imagePullPolicy: {{ .Values.tor.image.pullPolicy }}
+          command: ["tor", "-f", "/etc/tor/torrc"]
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          volumeMounts:
+            - name: tor-state
+              mountPath: /var/lib/tor
+            - name: torrc
+              mountPath: /etc/tor/torrc
+              subPath: torrc
+              readOnly: true
+          resources:
+            {{- toYaml .Values.tor.resources | nindent 12 }}
+      volumes:
+        - name: tor-state
+          emptyDir:
+            sizeLimit: 32Mi
+        - name: torrc
+          configMap:
+            name: {{ $fullname }}-tor
+        - name: onion-key
+          secret:
+            secretName: {{ .Values.tor.keySecret | quote }}
+            defaultMode: 0440
+{{- end }}
