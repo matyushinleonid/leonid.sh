@@ -32,7 +32,7 @@ FROM dependencies AS capsule
 COPY content ./content
 COPY scripts ./scripts
 COPY src/assets/images/portrait.jpg ./src/assets/images/portrait.jpg
-RUN node scripts/generate-gemini.mjs
+RUN node scripts/generate-gemini.mjs && chmod -R a=rX /app/build/gemini
 
 FROM texlive/texlive:${TEXLIVE_VERSION} AS cv-pdf
 
@@ -65,8 +65,8 @@ FROM nginxinc/nginx-unprivileged:${NGINX_VERSION}-alpine AS production
 
 COPY --chmod=0644 nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY --from=capsule --chmod=0644 /app/build/gemini/ /srv/capsule/
-COPY --from=cv-pdf --chmod=0644 /cv/out/ /srv/capsule/cv/
+COPY --from=capsule /app/build/gemini/ /srv/capsule/
+COPY --from=cv-pdf /cv/out/ /srv/capsule/cv/
 
 EXPOSE 8080
 
