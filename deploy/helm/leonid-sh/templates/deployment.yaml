@@ -43,7 +43,7 @@ spec:
           command:
             - sh
             - -c
-            - cp -a /srv/capsule/. /capsule/
+            - cp -r /srv/capsule/. /capsule/
           volumeMounts:
             - name: capsule
               mountPath: /capsule
