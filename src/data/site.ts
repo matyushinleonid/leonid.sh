@@ -77,12 +77,14 @@ export type SiteCopy = {
     achievements: string;
     source: string;
     gemini: string;
+    onion: string;
     portrait: string;
   };
   contact: {
     email: string;
     site: string;
     telegram: string;
+    onion: string;
   };
   experience: Experience[];
   projects: Project[];

@@ -147,6 +147,56 @@
           }
         }
       }
+    },
+    "tor": {
+      "type": "object",
+      "required": ["enabled", "keySecret", "externalSecret", "image"],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "onionAddress": {
+          "type": "string"
+        },
+        "keySecret": {
+          "type": "string",
+          "minLength": 1
+        },
+        "externalSecret": {
+          "type": "object",
+          "required": ["refreshInterval", "lockboxSecretId"],
+          "properties": {
+            "refreshInterval": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lockboxSecretId": {
+              "type": "string"
+            }
+          }
+        },
+        "image": {
+          "type": "object",
+          "required": ["repository", "tag", "pullPolicy"],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        }
+      }
     }
   }
 }

@@ -26,12 +26,14 @@ labels:
   achievements: другие достижения
   source: source
   gemini: gemini-зеркало
+  onion: onion-зеркало
   portrait: Леонид Матюшин
 
 contact:
   email: matyushinleonid@gmail.com
   site: leonid.sh
   telegram: "@matyushinleonid"
+  onion: http://leonideoyh3d5l7mewj5tvfawu4eznjpmwqisk6njpijywgy22lvtjad.onion/
 
 experience:
   - company: Nebius

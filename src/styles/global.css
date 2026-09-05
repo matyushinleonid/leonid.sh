@@ -1679,3 +1679,20 @@ html[data-reveal] .reveal-key i::before {
   color: #000;
   background: #fff;
 }
+
+.footer-inner .onion-link {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  color: #fff;
+  background: #7d4698;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.footer-inner .onion-link:hover {
+  color: #000;
+  background: #fff;
+}
