@@ -51,6 +51,17 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: {{ $fullname }}-tls
+    {{- if $.Values.gemini.enabled }}
+    - name: gemini
+      port: {{ $.Values.gemini.port }}
+      protocol: TCP
+      allowedRoutes:
+        kinds:
+          - group: gateway.networking.k8s.io
+            kind: TCPRoute
+        namespaces:
+          from: Same
+    {{- end }}
     {{- range $index, $entry := $aliases }}
     - name: {{ printf "https-alias-%d" $index }}
       hostname: {{ $entry.host | quote }}

@@ -1,0 +1,68 @@
+{{- if .Values.gemini.enabled }}
+{{- $fullname := include "leonid-sh.fullname" . }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullname }}-gemini
+  labels:
+    {{- include "leonid-sh.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "leonid-sh.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: gemini
+      port: {{ .Values.gemini.port }}
+      targetPort: gemini
+      protocol: TCP
+{{- if .Values.gemini.externalSecret.lockboxSecretId }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ .Values.gemini.certSecret }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "leonid-sh.labels" . | nindent 4 }}
+spec:
+  refreshInterval: {{ .Values.gemini.externalSecret.refreshInterval | quote }}
+  secretStoreRef:
+    name: yc-lockbox
+    kind: ClusterSecretStore
+  target:
+    name: {{ .Values.gemini.certSecret }}
+    creationPolicy: Owner
+  data:
+    - secretKey: cert.der
+      remoteRef:
+        key: {{ .Values.gemini.externalSecret.lockboxSecretId | quote }}
+        property: cert.der
+        decodingStrategy: Base64
+    - secretKey: key.der
+      remoteRef:
+        key: {{ .Values.gemini.externalSecret.lockboxSecretId | quote }}
+        property: key.der
+        decodingStrategy: Base64
+{{- end }}
+{{- if .Values.gateway.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: {{ $fullname }}-gemini
+  labels:
+    {{- include "leonid-sh.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: ListenerSet
+      name: {{ $fullname }}
+      sectionName: gemini
+  rules:
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: {{ $fullname }}-gemini
+          port: {{ .Values.gemini.port }}
+{{- end }}
+{{- end }}

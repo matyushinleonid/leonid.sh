@@ -35,3 +35,36 @@ services:
       timeout: 3s
       retries: 5
     restart: unless-stopped
+
+  capsule:
+    profiles: ["dev", "prod"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: capsule
+    command:
+      - sh
+      - -c
+      - "rm -rf /capsule/* /capsule/.meta; cp -a /app/build/gemini/. /capsule/; mkdir -p /capsule/cv; cp -a /pdfs/. /capsule/cv/ 2>/dev/null || true"
+    volumes:
+      - capsule:/capsule
+      - ./public/cv:/pdfs:ro
+
+  gemini:
+    profiles: ["dev", "prod"]
+    image: ghcr.io/mbrubeck/agate:latest
+    init: true
+    command: ["--hostname", "localhost", "--skip-port-check"]
+    depends_on:
+      capsule:
+        condition: service_completed_successfully
+    ports:
+      - "${GEMINI_PORT:-1965}:1965"
+    volumes:
+      - capsule:/gmi:ro
+      - gemini-certs:/certs
+    restart: unless-stopped
+
+volumes:
+  capsule:
+  gemini-certs:

@@ -33,6 +33,23 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.gemini.enabled }}
+      initContainers:
+        - name: capsule
+          image: {{ include "leonid-sh.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          command:
+            - sh
+            - -c
+            - cp -a /srv/capsule/. /capsule/
+          volumeMounts:
+            - name: capsule
+              mountPath: /capsule
+          resources:
+            {{- toYaml .Values.gemini.resources | nindent 12 }}
+      {{- end }}
       containers:
         - name: site
           image: {{ include "leonid-sh.image" . | quote }}
@@ -64,10 +81,42 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+        {{- if .Values.gemini.enabled }}
+        - name: gemini
+          image: "{{ .Values.gemini.image.repository }}:{{ .Values.gemini.image.tag }}"
+          imagePullPolicy: {{ .Values.gemini.image.pullPolicy }}
+          args:
+            - --hostname
+            - {{ .Values.gemini.hostname | quote }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          ports:
+            - name: gemini
+              containerPort: 1965
+              protocol: TCP
+          volumeMounts:
+            - name: capsule
+              mountPath: /gmi
+              readOnly: true
+            - name: gemini-cert
+              mountPath: /certs/{{ .Values.gemini.hostname }}
+              readOnly: true
+          resources:
+            {{- toYaml .Values.gemini.resources | nindent 12 }}
+        {{- end }}
       volumes:
         - name: tmp
           emptyDir:
             sizeLimit: 16Mi
+        {{- if .Values.gemini.enabled }}
+        - name: capsule
+          emptyDir:
+            sizeLimit: 16Mi
+        - name: gemini-cert
+          secret:
+            secretName: {{ .Values.gemini.certSecret | quote }}
+            defaultMode: 0440
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

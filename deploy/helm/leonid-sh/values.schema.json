@@ -11,39 +11,139 @@
       "type": "object",
       "required": ["repository", "pullPolicy", "tag", "digest"],
       "properties": {
-        "repository": { "type": "string", "minLength": 1 },
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
         "pullPolicy": {
           "type": "string",
           "enum": ["Always", "IfNotPresent", "Never"]
         },
-        "tag": { "type": "string" },
-        "digest": { "type": "string" }
+        "tag": {
+          "type": "string"
+        },
+        "digest": {
+          "type": "string"
+        }
       }
     },
     "service": {
       "type": "object",
       "required": ["type", "port", "targetPort"],
       "properties": {
-        "type": { "type": "string" },
-        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
-        "targetPort": { "type": "integer", "minimum": 1, "maximum": 65535 }
+        "type": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "targetPort": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        }
       }
     },
     "gateway": {
       "type": "object",
       "required": ["enabled", "host", "dnsTarget", "clusterIssuer", "parent"],
       "properties": {
-        "enabled": { "type": "boolean" },
-        "host": { "type": "string", "minLength": 1 },
-        "dnsTarget": { "type": "string", "minLength": 1 },
-        "clusterIssuer": { "type": "string", "minLength": 1 },
+        "enabled": {
+          "type": "boolean"
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dnsTarget": {
+          "type": "string",
+          "minLength": 1
+        },
+        "clusterIssuer": {
+          "type": "string",
+          "minLength": 1
+        },
         "parent": {
           "type": "object",
           "required": ["name", "namespace", "httpSectionName"],
           "properties": {
-            "name": { "type": "string", "minLength": 1 },
-            "namespace": { "type": "string", "minLength": 1 },
-            "httpSectionName": { "type": "string", "minLength": 1 }
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "namespace": {
+              "type": "string",
+              "minLength": 1
+            },
+            "httpSectionName": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "gemini": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "hostname",
+        "port",
+        "certSecret",
+        "image",
+        "externalSecret"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "hostname": {
+          "type": "string",
+          "minLength": 1
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "certSecret": {
+          "type": "string",
+          "minLength": 1
+        },
+        "image": {
+          "type": "object",
+          "required": ["repository", "tag", "pullPolicy"],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tag": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pullPolicy": {
+              "type": "string",
+              "enum": ["Always", "IfNotPresent", "Never"]
+            }
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "externalSecret": {
+          "type": "object",
+          "required": ["refreshInterval", "lockboxSecretId"],
+          "properties": {
+            "refreshInterval": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lockboxSecretId": {
+              "type": "string"
+            }
           }
         }
       }
