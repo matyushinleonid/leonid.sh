@@ -55,22 +55,57 @@ function heading(value) {
   return body.charAt(0).toUpperCase() + body.slice(1);
 }
 
+const GLYPHS = {
+  " ": ["  ", "  ", "  ", "  ", "  "],
+  ".": ["  ", "  ", "  ", "  ", "# "],
+  A: [" ### ", "#   #", "#####", "#   #", "#   #"],
+  D: ["#### ", "#   #", "#   #", "#   #", "#### "],
+  E: ["#####", "#    ", "#### ", "#    ", "#####"],
+  H: ["#   #", "#   #", "#####", "#   #", "#   #"],
+  I: ["###", " # ", " # ", " # ", "###"],
+  L: ["#    ", "#    ", "#    ", "#    ", "#####"],
+  M: ["#   #", "## ##", "# # #", "#   #", "#   #"],
+  N: ["#   #", "##  #", "# # #", "#  ##", "#   #"],
+  O: [" ### ", "#   #", "#   #", "#   #", " ### "],
+  S: [" ####", "#    ", " ### ", "    #", "#### "],
+  T: ["#####", "  #  ", "  #  ", "  #  ", "  #  "],
+  U: ["#   #", "#   #", "#   #", "#   #", " ### "],
+  Y: ["#   #", " # # ", "  #  ", "  #  ", "  #  "],
+  А: [" ### ", "#   #", "#####", "#   #", "#   #"],
+  Д: [" ####", " #  #", " #  #", "#####", "#   #"],
+  Е: ["#####", "#    ", "#### ", "#    ", "#####"],
+  И: ["#   #", "#  ##", "# # #", "##  #", "#   #"],
+  Л: [" ####", " #  #", " #  #", " #  #", "#   #"],
+  М: ["#   #", "## ##", "# # #", "#   #", "#   #"],
+  Н: ["#   #", "#   #", "#####", "#   #", "#   #"],
+  О: [" ### ", "#   #", "#   #", "#   #", " ### "],
+  Т: ["#####", "  #  ", "  #  ", "  #  ", "  #  "],
+  Ш: ["#  #  #", "#  #  #", "#  #  #", "#  #  #", "#######"],
+  Ю: ["#  ### ", "#  #  #", "####  #", "#  #  #", "#  ### "],
+};
+
+function asciiArt(value) {
+  const letters = [...value.toUpperCase()];
+  if (letters.some((letter) => !GLYPHS[letter])) {
+    return null;
+  }
+  return [0, 1, 2, 3, 4].map((row) =>
+    letters
+      .map((letter) => GLYPHS[letter][row])
+      .join(" ")
+      .replace(/\s+$/, ""),
+  );
+}
+
 function banner(cv) {
-  const rows = [
-    text(cv.hero.name).toUpperCase(),
-    `${text(cv.hero.role)} · ${text(cv.hero.location)}`,
-  ];
-  const width = Math.max(...rows.map((row) => [...row].length)) + 4;
-  const rule = "═".repeat(width);
-  const framed = rows.map((row) => {
-    const padding = " ".repeat(width - [...row].length - 2);
-    return `║  ${row}${padding}║`;
-  });
+  const name = text(cv.hero.name);
+  const words = name.split(" ").map(asciiArt);
+  const rows = words.every(Boolean) ? words.flat() : [name.toUpperCase()];
   return [
-    "```" + text(cv.hero.name),
-    `╔${rule}╗`,
-    ...framed,
-    `╚${rule}╝`,
+    "```" + name,
+    ...rows,
+    "",
+    `${text(cv.hero.role)} · ${text(cv.hero.location)}`,
     "```",
   ];
 }

@@ -76,6 +76,7 @@ export type SiteCopy = {
     education: string;
     achievements: string;
     source: string;
+    gemini: string;
     portrait: string;
   };
   contact: {

@@ -1662,3 +1662,20 @@ html[data-reveal] .reveal-key i::before {
   font-size: 0.76rem;
   line-height: 1.65;
 }
+
+.footer-inner .gemini-link {
+  flex: 0 0 auto;
+  padding: 3px 10px;
+  color: var(--accent-ink);
+  background: var(--magenta);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.footer-inner .gemini-link:hover {
+  color: #000;
+  background: #fff;
+}
