@@ -10,6 +10,25 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+gemini:
+  enabled: false
+  hostname: leonid.sh
+  port: 1965
+  certSecret: leonid-sh-gemini-cert
+  externalSecret:
+    refreshInterval: 15m
+    lockboxSecretId: ""
+  image:
+    repository: ghcr.io/mbrubeck/agate
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      memory: 64Mi
+
 podAnnotations: {}
 podLabels: {}
 

@@ -13,6 +13,7 @@ make build          # production image, leonid-sh:local
 make cv             # both CV PDFs into public/cv/
 make markdown FILE=<path>   # render the CV as github.io-style markdown
 make indexnow               # ping IndexNow (Yandex) after a deploy
+make gemini-cert            # mint the self-signed cert for the Gemini capsule
 ```
 
 Docker is the only requirement. Without it: Node 26, then `npm ci && npm run dev`.
