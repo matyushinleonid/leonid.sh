@@ -150,7 +150,7 @@
     },
     "tor": {
       "type": "object",
-      "required": ["enabled", "keySecret", "externalSecret", "image"],
+      "required": ["enabled", "keySecret", "externalSecret", "image", "socks5"],
       "properties": {
         "enabled": {
           "type": "boolean"
@@ -164,7 +164,12 @@
         },
         "externalSecret": {
           "type": "object",
-          "required": ["refreshInterval", "lockboxSecretId"],
+          "required": [
+            "refreshInterval",
+            "lockboxSecretId",
+            "socks5UsernameProperty",
+            "socks5PasswordProperty"
+          ],
           "properties": {
             "refreshInterval": {
               "type": "string",
@@ -172,6 +177,14 @@
             },
             "lockboxSecretId": {
               "type": "string"
+            },
+            "socks5UsernameProperty": {
+              "type": "string",
+              "minLength": 1
+            },
+            "socks5PasswordProperty": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -195,6 +208,20 @@
         },
         "resources": {
           "type": "object"
+        },
+        "socks5": {
+          "type": "object",
+          "required": ["host", "port"],
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          }
         }
       }
     }
