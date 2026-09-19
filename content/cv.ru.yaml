@@ -191,6 +191,25 @@ projects:
       label: "@SeinZumTodeBot"
       href: https://t.me/SeinZumTodeBot
 
+  - slug: kongzilla
+    name: kongzilla.leonid.sh
+    description: >-
+      Разбор диапазонов и досок в холдеме прямо в браузере — open-source
+      альтернатива проприетарному Windows-приложению Flopzilla. Можно задать
+      несколько диапазонов и увидеть аналитику того, как им подошла текстура
+      борда на разных улицах торговли: готовые руки, дро, эквити каждой
+      комбинации. Есть встроенные готовые префлоп-чарты. Движок — Rust,
+      скомпилированный в WebAssembly: всё считается в браузере, а сессия
+      целиком умещается в ссылку.
+    href: https://github.com/matyushinleonid/kongzilla
+    argocdApp: kongzilla
+    status: running
+    cvEntry: false
+    technologies: [Rust, WebAssembly, TypeScript, Kubernetes, Argo CD]
+    extraLink:
+      label: kongzilla.leonid.sh
+      href: https://kongzilla.leonid.sh
+
   - slug: minecraft
     name: minecraft.leonid.sh
     description: >-

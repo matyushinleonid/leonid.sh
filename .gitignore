@@ -16,3 +16,5 @@ AGENTS.md
 out/
 
 tmp/
+
+.npm-cache/
