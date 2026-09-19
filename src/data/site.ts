@@ -7,7 +7,7 @@ export const locales = ["en", "ru"] as const;
 
 export type Locale = (typeof locales)[number];
 
-export const projectSlugs = ["k8s", "sein", "minecraft"] as const;
+export const projectSlugs = ["k8s", "sein", "kongzilla", "minecraft"] as const;
 
 export type ProjectSlug = (typeof projectSlugs)[number];
 
